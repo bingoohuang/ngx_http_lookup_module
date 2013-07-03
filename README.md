@@ -39,4 +39,4 @@ so to find city code we can:
 curl --trace-time --trace trace.log http://127.0.0.1:8888/city?num=18699402100
 
 
-PS: SOURCE was copied and changed from ngx_http_geo_module.
+PS: SOURCE was copied and changed from ngx_http_geo_module base on version 1.4.1.
