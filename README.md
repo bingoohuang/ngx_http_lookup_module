@@ -9,7 +9,7 @@ config example:
 
 http {
 
-    lookup $arg_num $grade {
+    lookup $arg_scores $grade {
            ranges;
            default 0;
            100-1000 A;
