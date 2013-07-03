@@ -3,7 +3,7 @@ ngx_http_lookup_module
 
 lookup value in ranges 
 
-this module is similar to map module. but it searchs in a list of ranges to find a map value.
+this module is similar to map module. but it searchs in a list of ranges(long value paris) to find a mapped value.
 
 config example:
 
