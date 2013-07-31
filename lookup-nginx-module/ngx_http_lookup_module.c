@@ -335,6 +335,7 @@ ngx_http_lookup(ngx_conf_t *cf, ngx_command_t *dummy, void *conf)
     ngx_str_t                *value;
     ngx_http_lookup_conf_ctx_t  *ctx;
 
+    rv = NGX_CONF_OK;
     ctx = cf->ctx;
 
     value = cf->args->elts;
@@ -487,7 +488,7 @@ static char *
 ngx_http_lookup_add_range(ngx_conf_t *cf, ngx_http_lookup_conf_ctx_t *ctx,
     ngx_int_t start, ngx_int_t end)
 {
-    ngx_uint_t             n, h, i, s, e;
+    ngx_int_t             n, h, i, s, e;
     ngx_array_t           *a;
     ngx_http_lookup_t     *range;
 
@@ -527,11 +528,11 @@ ngx_http_lookup_add_range(ngx_conf_t *cf, ngx_http_lookup_conf_ctx_t *ctx,
 
             i--;
 
-            if (e < (ngx_uint_t) range[i].start) {
+            if (e < range[i].start) {
                 continue;
             }
 
-            if (s > (ngx_uint_t) range[i].end) {
+            if (s > range[i].end) {
 
                 /* add after the range */
 
@@ -552,8 +553,8 @@ ngx_http_lookup_add_range(ngx_conf_t *cf, ngx_http_lookup_conf_ctx_t *ctx,
                 goto next;
             }
 
-            if (s == (ngx_uint_t) range[i].start
-                && e == (ngx_uint_t) range[i].end)
+            if (s == range[i].start
+                && e == range[i].end)
             {
                 ngx_conf_log_error(NGX_LOG_WARN, cf, 0,
                     "duplicate range \"%V\", value: \"%v\", old value: \"%v\"",
@@ -564,8 +565,8 @@ ngx_http_lookup_add_range(ngx_conf_t *cf, ngx_http_lookup_conf_ctx_t *ctx,
                 goto next;
             }
 
-            if (s > (ngx_uint_t) range[i].start
-                && e < (ngx_uint_t) range[i].end)
+            if (s > range[i].start
+                && e < range[i].end)
             {
                 /* split the range and insert the new one */
 
@@ -597,8 +598,8 @@ ngx_http_lookup_add_range(ngx_conf_t *cf, ngx_http_lookup_conf_ctx_t *ctx,
                 goto next;
             }
 
-            if (s == (ngx_uint_t) range[i].start
-                && e < (ngx_uint_t) range[i].end)
+            if (s == range[i].start
+                && e < range[i].end)
             {
                 /* shift the range start and insert the new range */
 
@@ -621,8 +622,8 @@ ngx_http_lookup_add_range(ngx_conf_t *cf, ngx_http_lookup_conf_ctx_t *ctx,
                 goto next;
             }
 
-            if (s > (ngx_uint_t) range[i].start
-                && e == (ngx_uint_t) range[i].end)
+            if (s > range[i].start
+                && e == range[i].end)
             {
                 /* shift the range end and insert the new range */
 
