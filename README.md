@@ -65,17 +65,23 @@ http {
 }
 
 so to find city code we can:
+```
 > curl --trace-time --trace trace.log http://127.0.0.1:8077/cityCode?num=18699402100
+
 > curl --data "mobile=18699199988" http://127.0.0.1:8077/city
 089X890
+
 > curl --data "mobile=18699549999" http://127.0.0.1:8077/city
 089X894
+
 > curl "http://127.0.0.1:8077/city?mobile=18699199988"
 089X890
+
 > curl "http://127.0.0.1:8077/city?mobile=18699549999"
 089X894
+
 > curl "http://127.0.0.1:8077/city?mobile=18551855099"
 00X000
-
+```
 
 PS: SOURCE was copied and changed from ngx_http_geo_module base on version 1.4.1.
