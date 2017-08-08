@@ -76,7 +76,6 @@ static void ngx_http_lookup_create_binary_base(ngx_http_lookup_conf_ctx_t *ctx);
 static u_char *ngx_http_lookup_copy_values(u_char *base, u_char *p,
     ngx_rbtree_node_t *node, ngx_rbtree_node_t *sentinel);
 
-
 static ngx_command_t  ngx_http_lookup_commands[] = {
 
     { ngx_string("lookup"),
@@ -88,7 +87,6 @@ static ngx_command_t  ngx_http_lookup_commands[] = {
 
       ngx_null_command
 };
-
 
 static ngx_http_module_t  ngx_http_lookup_module_ctx = {
     NULL,                                  /* preconfiguration */
@@ -103,7 +101,6 @@ static ngx_http_module_t  ngx_http_lookup_module_ctx = {
     NULL,                                  /* create location configuration */
     NULL                                   /* merge location configuration */
 };
-
 
 ngx_module_t  ngx_http_lookup_module = {
     NGX_MODULE_V1,
@@ -120,7 +117,6 @@ ngx_module_t  ngx_http_lookup_module = {
     NGX_MODULE_V1_PADDING
 };
 
-
 typedef struct {
     u_char    GEORNG[6];
     u_char    version;
@@ -129,12 +125,9 @@ typedef struct {
     uint32_t  crc32;
 } ngx_http_lookup_header_t;
 
-
 static ngx_http_lookup_header_t  ngx_http_lookup_header = {
     { 'C', 'O', 'M', 'R', 'N', 'G' }, 0, sizeof(void *), 0x12345678, 0
 };
-
-
 
 static ngx_int_t
 ngx_http_lookup_range_variable(ngx_http_request_t *r, ngx_http_variable_value_t *v,
@@ -144,10 +137,10 @@ ngx_http_lookup_range_variable(ngx_http_request_t *r, ngx_http_variable_value_t 
 
     ngx_uint_t             n;
     ngx_http_lookup_t  *range;
-    
+
     ngx_http_variable_value_t  *key;
-	ngx_int_t              k;
-    
+    ngx_int_t              k;
+
     key = ngx_http_get_flushed_variable(r, ctx->index);
 
     if (key == NULL || key->not_found) {
@@ -156,8 +149,12 @@ ngx_http_lookup_range_variable(ngx_http_request_t *r, ngx_http_variable_value_t 
 
         return NGX_ERROR;
     }
-	
-	k = ngx_atoi(key->data, key->len);
+
+  	k = ngx_atoi(key->data, key->len);
+    if (k == NGX_ERROR || k < 0) {
+        ngx_log_error(NGX_LOG_ERR, r->connection->log, 0, "invalid input: %s", key->data);
+        return NGX_ERROR;
+    }
 
     ngx_log_debug1(NGX_LOG_DEBUG_HTTP, r->connection->log, 0,
                    "search started: %v", v);
@@ -182,12 +179,8 @@ ngx_http_lookup_range_variable(ngx_http_request_t *r, ngx_http_variable_value_t 
 
     ngx_log_debug1(NGX_LOG_DEBUG_HTTP, r->connection->log, 0,
                    "http lookup: %v", v);
-
     return NGX_OK;
 }
-
-
-
 
 static char *
 ngx_http_lookup_block(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
@@ -367,28 +360,20 @@ ngx_http_lookup(ngx_conf_t *cf, ngx_command_t *dummy, void *conf)
     }
 
     if (ngx_strcmp(value[0].data, "include") == 0) {
-
         rv = ngx_http_lookup_include(cf, ctx, &value[1]);
-
         goto done;
-
-    } 
+    }
 
     if (ctx->ranges) {
         rv = ngx_http_lookup_range(cf, ctx, value);
-
     }
 
 done:
-
     ngx_reset_pool(cf->pool);
-
     return rv;
 
 failed:
-
     ngx_reset_pool(cf->pool);
-
     return NGX_CONF_ERROR;
 }
 
@@ -435,7 +420,6 @@ ngx_http_lookup_range(ngx_conf_t *cf, ngx_http_lookup_conf_ctx_t *ctx,
     ctx->entries++;
     ctx->outside_entries = 1;
 
-
     net = &value[0];
 
     last = net->data + net->len;
@@ -475,9 +459,7 @@ ngx_http_lookup_range(ngx_conf_t *cf, ngx_http_lookup_conf_ctx_t *ctx,
     return ngx_http_lookup_add_range(cf, ctx, start, end);
 
 invalid:
-
     ngx_conf_log_error(NGX_LOG_EMERG, cf, 0, "invalid range \"%V\"", net);
-
     return NGX_CONF_ERROR;
 }
 

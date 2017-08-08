@@ -1,12 +1,13 @@
 ngx_http_lookup_module
 ======================
 
-lookup value in ranges 
+lookup value in ranges
 
-this module is similar to map module. but it searchs in a list of ranges(long integer value pairs) to find a mapped value.
+this module is similar to ngx_http_geo_module. but it searchs in a list of ranges(long value pairs) to find a mapped value.
 
 config example:
 
+```nginx
 http {
 
     lookup $arg_scores $grade {
@@ -16,7 +17,7 @@ http {
            1001-2000 B;
            2001-3000 C;
     }
-    
+
     lookup $arg_num $cityCode {
            ranges;
            default 00X000;
@@ -36,7 +37,7 @@ http {
            18699400000-18699499999 089X891;
            18699500000-18699549999 089X894;
     }
-    
+
     server {
           # ...
           location /cityCode {
@@ -63,7 +64,15 @@ http {
           }
     }
 }
+```
 
+# install
+`./configure --prefix=/path/to/nginx --add-module=/path/to/github/ngx_http_lookup_module/`
+
+# install on MAC
+`./configure --prefix=/Users/bingoo/run/openresty/ --with-openssl=/usr/local/Cellar/openssl/1.0.2l --with-cc-opt="-I/usr/local/Cellar/openssl/1.0.2l/include -I/usr/local/Cellar/pcre/8.41/include" --with-ld-opt="-L/usr/local/Cellar/openssl/1.0.2l/lib -L/usr/local/Cellar/pcre/8.40/lib" --add-module=/Users/bingoo/GitHub/ngx_http_lookup_module`
+
+# demo
 so to find city code we can:
 ```
 > curl --trace-time --trace trace.log http://127.0.0.1:8077/cityCode?num=18699402100
