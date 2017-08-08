@@ -75,12 +75,13 @@ http {
 # demo
 so to find city code we can:
 ```
-> curl --trace-time --trace trace.log http://127.0.0.1:8077/cityCode?num=18699402100
-
-> curl --data "mobile=18699199988" http://127.0.0.1:8077/city
+> curl -w "%{time_total}" "http://127.0.0.1:8077/cityCode?num=18699402100"
+089X891
+0.006483
+> curl --data "mobile=18699199988" "http://127.0.0.1:8077/city"
 089X890
 
-> curl --data "mobile=18699549999" http://127.0.0.1:8077/city
+> curl --data "mobile=18699549999" "http://127.0.0.1:8077/city"
 089X894
 
 > curl "http://127.0.0.1:8077/city?mobile=18699199988"
