@@ -133,13 +133,10 @@ static ngx_int_t
 ngx_http_lookup_range_variable(ngx_http_request_t *r, ngx_http_variable_value_t *v,
     uintptr_t data)
 {
-    ngx_http_lookup_ctx_t *ctx = (ngx_http_lookup_ctx_t *) data;
-
-    ngx_uint_t             n;
-    ngx_http_lookup_t  *range;
-
-    ngx_http_variable_value_t  *key;
-    ngx_int_t              k;
+    ngx_http_lookup_ctx_t     *ctx = (ngx_http_lookup_ctx_t *) data;
+    ngx_http_lookup_t         *range;
+    ngx_http_variable_value_t *key;
+    ngx_int_t                  n, k;
 
     key = ngx_http_get_flushed_variable(r, ctx->index);
 
@@ -167,9 +164,7 @@ ngx_http_lookup_range_variable(ngx_http_request_t *r, ngx_http_variable_value_t 
         if (range) {
             n = k & 0xffffffff;
             do {
-                if (n >= (ngx_uint_t) range->start
-                    && n <= (ngx_uint_t) range->end)
-                {
+                if (n >=  range->start && n <= range->end) {
                     *v = *range->value;
                     break;
                 }
